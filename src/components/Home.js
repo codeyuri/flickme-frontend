@@ -2,9 +2,13 @@ import React, { useState, useRef, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 
+import Modal from './modal/Modal'
+
 const Home = (props) => {
     let [nameLength, setUsernameLength] = useState(7);
     const [error, setError] = useState('');
+    const [isEmpty, setIsEmpty] = useState(false);
+    const [modalError, setModalError] = useState(false);
     const [username, setUsername] = useState('');
     const [room, setRoom] = useState('JavaScript');
     const joinRef = useRef(null);
@@ -33,33 +37,32 @@ const Home = (props) => {
 
         let isLoggedIn = false;
 
-        if (!username) { return false }
+        if (!username) { 
+            setError('Please input something!')
+            setIsEmpty(true)
+            setModalError(true)
+            return false
+        }
         
         isLoggedIn = true;
 
         let newUser = {
             username: username || localStorage.getItem('username'),
             room: room || localStorage.getItem('room'),
-            // isLoggedIn: isLoggedIn || localStorage.getItem('isLoggedIn'),
-            // date: new Date().toISOString()
+            dateJoined: new Date().toISOString(),
             isOnline: false
         }
 
         try {
             const result = axios.post('http://localhost:7575/createUsers', newUser)
                 .then( res => {
-                    if ( res.data [0].isAccess ) {
-                        // globalDispatch({ type: "username", value: user });
-                        // globalDispatch({ type: "chatRoom", value: room });
-                        // globalDispatch({ type: "isOnline", value: false });
-                        localStorage.setItem('username', res.data.username)
-                        localStorage.setItem('room', res.data.room)
-                        localStorage.setItem('isOnline', false)
-                        
+                    localStorage.setItem('userId', res.data[0].results.data)
+
+                    if ( res.data[0].isAccess ) {
                         props.history.push("/login");
                     } else {
-                        setError("already exist / try a new one");
-                        alert("user exist!!!");
+                        setError(`Sign up failed! User ${username} already exists. Please use another username!`)
+                        setModalError(true)
                     }
                 })
             // console.log(`added to db: ${result}`)
@@ -74,32 +77,59 @@ const Home = (props) => {
 
     }
 
+    const handleClickJoin = (e) => {
+        e.preventDefault()
+        props.history.push('/login')
+    }
+
     return (
-        <div className="chat_home">
-            <form onSubmit={handleLogin}>
-                <span>{nameLength}/7</span>
-                <p>{ error }</p>
-                <input 
-                    type="text"
-                    value={username}
-                    autoFocus={true} 
-                    ref={joinRef} 
-                    placeholder="Your Name..." 
-                    onChange={e => handleChange(e)}
-                />
-                <select onChange={e => setRoom(e.target.value)} value={room}>
-                    <optgroup label="Select room">
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="Python">Python</option>
-                        <option value="PHP">PHP</option>
-                        <option value="C#">C#</option>
-                        <option value="Ruby">Ruby</option>
-                        <option value="Java">Java</option>
-                    </optgroup>
-                </select>
-                <button type="submit" className="signin">Join Chat</button>
-            </form>
-        </div>
+        <>
+            { modalError && 
+                <Modal 
+                    isHome={true} 
+                    isEmpty={isEmpty} 
+                    setIsEmpty={setIsEmpty} 
+                    setModalError={setModalError} 
+                    error={error}
+                /> 
+            }
+            <div className="login">
+                <div className="login_con">
+                    <div className="login_body">
+                        <h2>Flickme!</h2>
+                        <h5>Register</h5>
+                        <form onSubmit={handleLogin}>
+                            <span>{nameLength}/7</span>
+                            {/* <p>{ error }</p> */}
+                            <input 
+                                type="text"
+                                value={username}
+                                autoFocus={true} 
+                                ref={joinRef} 
+                                placeholder="Your Name..." 
+                                onChange={e => handleChange(e)}
+                            />
+                            <select onChange={e => setRoom(e.target.value)} value={room}>
+                                <optgroup label="Select room">
+                                    <option value="JavaScript">JavaScript</option>
+                                    <option value="Python">Python</option>
+                                    <option value="PHP">PHP</option>
+                                    <option value="C#">C#</option>
+                                    <option value="Ruby">Ruby</option>
+                                    <option value="Java">Java</option>
+                                </optgroup>
+                            </select>
+                            <div className="submit_div">
+                                <button type="submit" className="signin">Join Chat</button>
+                            </div>
+                        </form>
+                        <div className="login_btm">
+                            <p>Already have an account? <b onClick={handleClickJoin}>Login here!</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
  

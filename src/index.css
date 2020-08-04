@@ -28,11 +28,32 @@ q { quotes: none; }
 .users_div button { padding: 5px; margin-bottom: 15px; }
 .css-13azwyo { padding-bottom: 35px; height: 60vh; }
 
-.chat_home { position: relative; width: 280px; max-width: 100%; margin: 0 auto; }
-.chat_home input { font-size: 39px; text-align: center; color: #444; margin-bottom: 15px; border-bottom: 1px solid transparent; padding: 10px 15px; }
-.chat_home input:focus, .chat_home input:active { border: 0 !important; border-bottom: 1px dotted teal !important; }
-.chat_home a:hover { background: #444; }
-.chat_home span { position: absolute; right: 5px; top: 10%; color: #ccc; font: 11px/15px 'Josefin Slab', serif; }
+/* login page */
+.login { width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; font-family: Calibri !important; }
+.login::after { content: ''; z-index: -1; position: absolute; top: 0; bottom: 0; right: 0; width: 50vw; height: 100vh; background: linear-gradient(to top, #3789b9, #09e6bb) }
+.login_body { position: relative; z-index: 10; }
+.login_con { position: relative; background: linear-gradient(to top, #59bef9, #00d2aa); width: 450px; height: auto; max-height: 85%; max-width: 85%; padding: 50px; }
+.login_con::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 50%; background: #fff; }
+.login_con::before { content: ''; position: absolute; top: -20px; bottom: -20px; left: -20px; width: 50%; padding: 10px; z-index: -1; border: 12px solid #25d0b8; }
+.login_con h2 { color: #fff; font-size: 25px; font-weight: 400; letter-spacing: 3px; border-bottom: 1px solid #fff; padding-bottom: 10px; margin-bottom: 10px; }
+.login_con h5 { color: #fff; font-size: 18px; font-weight: 400; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.login_con h5 span { color: red; letter-spacing: 0; font: 13px/25px 'Gafata', sans-serif; text-transform: none; }
+.login_body p { text-align: right; color: #666; font-size: 14px; text-transform: uppercase; }
+.login_body span { position: absolute; right: 5px; top: 30px; color: #777; font: 11px/15px 'Josefin Slab', serif; }
+
+.login_con form { padding: 10px 0; position: relative; }
+.login_con form input { font-size: 25px; text-align: center; color: #444; border: 1px solid transparent; padding: 15px 10px; background: linear-gradient(to left, #f2f2f2 50%, #fff 50%); border: 0; border-radius: 8px; margin-bottom: 10px; }
+.login_con form input:focus, .login_con form input:active { border: 0 !important; }
+.login_con form input:focus { border: 1px solid #999; }
+.login_con form select { padding: 20px; border-radius: 8px; color: #444; }
+
+.login_btm { margin-top: 30px; width: 45%; float: right; position: relative; }
+.login_btm b { cursor: pointer; color: teal }
+
+.submit_div { margin-top: 10px; }
+.login_con form button { position: relative; z-index: 2; width: 100%; cursor: pointer; border: none; background: linear-gradient(to right, #777 50%, #666 50%, #888); color: #fff; padding: 20px; font-size: 15px; letter-spacing: 5px; text-transform: uppercase; box-shadow: 0 2px 10px rgba(30, 191, 176, 0.4); border-radius: 7px; -webkit-transition: all .3s linear; transition: all .3s linear; }
+.login_con form button::before { content: ''; position: absolute; top: 0; right: 0; left: 0; bottom: 0; height: 100%; background: linear-gradient(to left, #777 50%, #666 50%, #888); opacity: 0; z-index: -1; border-radius: 7px; -webkit-transition: all .3s linear; transition: all .3s linear; }
+.submit_div:hover button::before { opacity: 1; }
 
 .chat_window { background: #f5f5f5; height: 100% }
 .css-13azwyo { background: #f5f5f5; border-bottom: 1px solid #ccc; } /* react-scroll-to-bottom custom div */
@@ -71,6 +92,17 @@ button:hover { background: #014d4d; -webkit-transition: all .05s linear; transit
 .chat_btm form { display: flex; }
 .chat_btm form button { width: 150px; }
 
+ /* modal errors */
+ .modal { font-family: Calibri; display: flex; justify-content: center; align-items: center; overflow-x: hidden; position: fixed; width: 100%; height: 100vh; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); z-index: 99; }
+ .modal .modal_con { width: 400px; max-width: 96%; background: #fff; border-radius: 10px; padding: 50px 0; position: relative; }
+ .modal_div { max-height: 500px; overflow-x: hidden; padding: 0 50px; }
+ .modal_close { position: absolute; top: 0; right: 0; background: teal; color: #fff; border-radius: 0 8px; font-size: 22px; width: 40px; height: 40px; text-align: center; cursor: pointer; -webkit-transition: all .3s linear; transition: all .3s linear; display: flex; justify-content: center; padding-top: 4px; z-index: 5; }
+ .modal_close:hover { background: #014d4d; }
+ .modal_body h3 { margin-bottom: 15px; padding-right: 0; color: tomato }
+ .modal_body p { position: relative; color: #333; font-style: italic; }
+ .modal_confirm { display: flex; justify-content: center; align-items: center; }
+ .modal_confirm button { font-size: 15px; margin: 25px 5px; text-align: center; -webkit-transition: all .3s linear; transition: all .3s linear; }
+
 @media only screen and (max-width: 710px) {
     body { overflow-x: hidden; }
     .chat_page { border-radius: 0; border: 0; display: flex; flex-direction: column; justify-content: space-between; height: 100vh; }
@@ -78,9 +110,23 @@ button:hover { background: #014d4d; -webkit-transition: all .05s linear; transit
     .css-13azwyo { flex: 1; } /* scroll-to-btm-custom div */
     textarea:focus, textarea:active, button:focus, button:active, .chat_home input:focus { outline: none !important; }
 }
+
+@media only screen and (max-width: 600px) {
+    /* login */
+    .login::after { width: 100vw; }
+    .login_con { padding: 20px 10px; box-shadow: 0 1px 16px rgba(0, 123, 123, 0.4); }
+    .login_con::before { content: none; }
+    .login_con h2 { font-size: 20px; letter-spacing: 3px; }
+    .login_con h5 { font-size: 14px; }
+    .login_body p { font-size: 12px; }
+}
+
 @media only screen and (max-width: 350px) {
     .chat_top_div { padding: 10px; }
     .chat_page h2 small { padding: 0 10px; line-height: 115%; }
     .chat_page h2 small q { display: block; }
     .chat_top_right span { padding-right: 5px; }
+
+    .login_btm { width: 50% }
+    .modal_div { padding: 0 30px; }
 }

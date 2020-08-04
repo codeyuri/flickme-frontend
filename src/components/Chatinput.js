@@ -21,9 +21,9 @@ const Chatinput = ({name, message, setMessage, sendMessage, socket}) => {
             setTypingMsg(`${name || 'Someone'} is typing a message....`)
             setTimeout(() => {
                 setTypingMsg(false)
-            }, 400)
+            }, 1400)
         })
-    }, [setTypingMsg, typing])
+    }, [typing])
 
     const handleKeyDown = ev => {
         if (ev.key == 'Enter' && !ev.shiftKey) {

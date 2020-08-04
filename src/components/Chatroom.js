@@ -28,7 +28,7 @@ const Chatroom = (props) => {
 
         socket.emit('userJoined', newUser, (error) => {
             if(error) {
-                alert(error)
+                alert(`${name} is currently logged in, do you want to login with another user?`)
                 props.history.push("/");
             }
         })
@@ -44,6 +44,11 @@ const Chatroom = (props) => {
         });
 
         return () => {
+            localStorage.removeItem('username')
+            localStorage.removeItem('room')
+            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('token')
+            localStorage.removeItem('userId')
             socket.emit('disconnect');
             socket.off();
         }
@@ -61,24 +66,9 @@ const Chatroom = (props) => {
                 setMessagesArray(msgs => [...result, ...msgs]);
             }
         });
-        // const result = axios.get('http://localhost:7575/messages')
-        // .then( res => {
-        //     console.log(res.data)
-        //     let result = res.data.length > 0 && res.data
-        //         .filter( checkRoom => {
-        //             return checkRoom.room === room
-        //         })
-
-        //     if (result.length > 0) {
-        //         setMessagesArray([...result])
-        //         console.log(result)
-        //     }
-        // })
-
-        // socket.emit('sendMessage', message, () => setMessage(''));
     }, []);
 
-    const sendMessage = e => {
+    const sendMessage = async e => {
         e.preventDefault();
         if(message) {
             
@@ -91,8 +81,7 @@ const Chatroom = (props) => {
             }
 
             try {
-                const result = axios.post('http://localhost:7575/messages', messageData)
-                console.log(`added to message table: ${result}`)
+                const result = await axios.post('http://localhost:7575/messages', messageData)
     
                 socket.emit('sendMessage', messageData, () => setMessage(''));
             } catch (e) {
@@ -105,8 +94,7 @@ const Chatroom = (props) => {
     }
 
     //prevent backspace sa keyboard ma exit ang app except sa textarea or input elements
-    // kaso dili working sa mobile kay lain ang keycode sa backspace sa mobile, react native unta makaya guro
-    // dili pa ko kamao sa react native haha
+    // kaso dili working sa mobile kay lain ang keycode sa backspace sa mobile
     useEffect(() => {
         let addev = window.addEventListener('keydown', function (event) {
             if (event.key === 'Backspace' || event.keyCode == 229 || event.keyCode == 8 || event.key == 229 || event.key == 8) {
@@ -125,7 +113,7 @@ const Chatroom = (props) => {
     return (
         <div className="chat_page" id="test">
             <div className="chat_top_div">
-                <h2>Chatyuri <small>Chat App <q>by Dan Quesada III</q></small></h2>
+                <h2>Flickme! <small>Chat App <q>by Team Seven</q></small></h2>
                 <div className="chat_top_right">
                     <span>Online ({users.length})</span>
                     {/* <span>Rooms</span> */}
