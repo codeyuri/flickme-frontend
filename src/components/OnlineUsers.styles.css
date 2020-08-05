@@ -1,0 +1,28 @@
+.circle-icon {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50px;
+
+  background-color: #94d095;
+}
+
+.circle-icon--online {
+  background-color: #94d095;
+}
+
+.circle-icon--offline {
+  background-color: gray;
+}
+
+.online-users-list-wrapper {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.online-users-list {
+  display: flex;
+  list-style-type: none !important;
+  margin-top: 4px;
+  padding-left: 0.5rem;
+}
