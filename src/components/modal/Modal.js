@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { withRouter } from 'react-router-dom'
-import { fn } from 'moment';
 
 const Modal = (props) => {
     const modalRef = useRef();
-    const { isHome, setModalError, error, isEmpty, setIsEmpty } = props
+    const { isHome, setModalError, error, errorType, setErrorType } = props
 
     useEffect(() => {
         const handleClickOutside = e => {
@@ -30,7 +29,7 @@ const Modal = (props) => {
     }
 
     const handleClose = () => {
-        setIsEmpty(false)
+        setErrorType('')
         setModalError(false)
     }
     
@@ -46,7 +45,7 @@ const Modal = (props) => {
                         <h3>Oops!</h3>
                         <p>{ error }</p>
                         <div className="modal_confirm">
-                            { isEmpty ? null :
+                            { errorType == 'isEmpty' ? null :
                                 isHome ? (
                                     <button onClick={handleLoginHere}>Login Here</button>
                                 ) : (

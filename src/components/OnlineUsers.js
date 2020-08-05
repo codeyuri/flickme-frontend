@@ -8,10 +8,13 @@ const OnlineUsers = (props) => {
     const handleLeave = () => {
         localStorage.removeItem('username')
         localStorage.removeItem('room')
-        localStorage.removeItem('isLoggedIn')
+        localStorage.removeItem('isOnline')
         localStorage.removeItem('token')
         localStorage.removeItem('userId')
 
+        // we did not use props here, kay ig leave room, dili ma clear ang localstorage datas
+        // if dili ma refresh ang site or page
+        
         // props.history.push('/')
     }
     

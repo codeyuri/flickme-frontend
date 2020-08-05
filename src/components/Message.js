@@ -21,7 +21,6 @@ const Message = ({msg: { sender, message, date}, currentUserName}) => {
                     <p>{ReactEmoji.emojify(message)}</p>
                 </div>
                 <span>{new Date(date).toLocaleTimeString()}</span>
-                {/* <span>{date}</span> */}
             </div>
         </div>
     )
