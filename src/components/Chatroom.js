@@ -16,14 +16,15 @@ const Chatroom = (props) => {
 
     let name = localStorage.getItem('username')
     let room = localStorage.getItem('room')
-    let userId = localStorage.getItem('objectToken')
-    // let isLoggedIn = localStorage.getItem('isLoggedIn')
+    let userId = localStorage.getItem('userId')
+    let isOnline = localStorage.getItem('isOnline')
 
     useEffect(() => {
         let newUser = {
-            // id: userId,
+            id: userId,
             username: name,
-            room
+            room,
+            isOnline
         }
 
         socket.emit('userJoined', newUser, (error) => {
@@ -32,39 +33,39 @@ const Chatroom = (props) => {
                 props.history.push("/");
             }
         })
-    }, [])
 
-    useEffect(() => {
-        socket.on('message', (message) => {
-            setMessagesArray(msgs => [...msgs, message]);
-        })
-
-        socket.on('usersOnline', ({ users }) => {
-            setUsers(users);
-        });
-
-        return () => {
+         return () => {
             localStorage.removeItem('username')
             localStorage.removeItem('room')
-            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('isOnline')
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
             socket.emit('disconnect');
             socket.off();
+            socket.close();
         }
     }, [])
 
+    // get messages from server / admin
+    useEffect(() => {
+        socket.on('message', (message) => {
+            setMessagesArray(msgs => [...msgs, message]);
+        })
+    }, [])
+
+    // get all messages in current room
+    // display online users in current room
     useEffect( () => {
         socket.on('getRoomMessages', (data) => {
-            // setMessagesArray([...data]);
-            let result = data.length > 0 && data
-                .filter( checkRoom => checkRoom.room === room )
-
-                // .sort((a, b) => b.date - a.date)
+            let result = data.length > 0 && data.filter( checkRoom => checkRoom.room === room )
 
             if (result.length > 0) {
                 setMessagesArray(msgs => [...result, ...msgs]);
             }
+        });
+
+        socket.on('usersOnline', ({ users }) => {
+            setUsers(users);
         });
     }, []);
 
@@ -116,7 +117,6 @@ const Chatroom = (props) => {
                 <h2>Flickme! <small>Chat App <q>by Team Seven</q></small></h2>
                 <div className="chat_top_right">
                     <span>Online ({users.length})</span>
-                    {/* <span>Rooms</span> */}
                     <strong onClick={() => setNavOpen(!navOpen)} className={navOpen ? 'close' : 'open'}></strong>
                 </div>
             </div>
